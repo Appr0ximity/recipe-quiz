@@ -74,7 +74,7 @@ export const cocktails: Drink[] = [
     name: "Rusty Nail",
     numberOfIngredients: 2,
     ingredients: [
-      { item: "Scotch Whisky", measure: "30 ml" },
+      { item: "Scotch Whiskey", measure: "30 ml" },
       { item: "Drambuie|Herbal Liqueur", measure: "30 ml" }
     ],
     garnish: "Lemon Zest",
@@ -87,7 +87,7 @@ export const cocktails: Drink[] = [
     name: "Godfather",
     numberOfIngredients: 2,
     ingredients: [
-      { item: "Scotch Whisky", measure: "30 ml" },
+      { item: "Scotch Whiskey", measure: "30 ml" },
       { item: "Amaretto|Almond Liqueur", measure: "30 ml" }
     ],
     garnish: "None",
@@ -351,7 +351,7 @@ export const cocktails: Drink[] = [
     ingredients: [
       { item: "Aromatic Bitters", measure: "2 Dashes" },
       { item: "Sweet Vermouth", measure: "20 ml" },
-      { item: "Scotch Whisky", measure: "60 ml" }
+      { item: "Scotch Whiskey", measure: "60 ml" }
     ],
     garnish: "1 Cherry",
     glass: "Chilled Martini|Coupe",
@@ -834,7 +834,7 @@ export const cocktails: Drink[] = [
     name: "Blood and Sand",
     numberOfIngredients: 4,
     ingredients: [
-      { item: "Scotch Whisky", measure: "20 ml" },
+      { item: "Scotch Whiskey", measure: "20 ml" },
       { item: "Sweet Vermouth", measure: "20 ml" },
       { item: "Cherry Brandy", measure: "20 ml" },
       { item: "Orange Juice", measure: "20 ml" }

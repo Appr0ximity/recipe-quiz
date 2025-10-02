@@ -5,7 +5,7 @@ import { QuestionCard } from './components/QuestionCard'
 function App() {
 
   const [questionNumbers, setQuestionNumbers] = useState<Set<number>>(new Set())
-  const [numberOfQuestions, setNumberOfQuestions] = useState(0)
+  const [numberOfQuestions, setNumberOfQuestions] = useState(1)
   const [showNumber, setShowNumber] = useState(true)
   const [completedQuestions, setCompletedQuestions] = useState(0)
   const [totalScore, setTotalScore] = useState(0)
@@ -117,7 +117,7 @@ function App() {
                 <input 
                   type="number" 
                   min="1"
-                  max="83"
+                  max="68"
                   onChange={e=>setNumberOfQuestions(Number(e.target.value))}
                   className="w-20 px-4 py-3 bg-gray-900/80 border border-gray-700 rounded-xl text-white text-center text-lg font-mono font-semibold focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent transition-all duration-300 hover:bg-gray-800/80"
                   placeholder="1-83"

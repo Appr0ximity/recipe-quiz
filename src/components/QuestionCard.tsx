@@ -109,8 +109,8 @@ export const QuestionCard = ({id}: {id: number})=>{
         {numberCorrect && <div>
             {Array.from({length: numberOfInputs}).map((_,index):ReactNode=>{
                 return <div key={index}>
-                    Name of the ingredient <input onChange={e => changeAnswers(index, "item", e.target.value)} type="text" id="name"/>
-                    Measurement for the ingredient <input onChange={e => changeAnswers(index, "measurement", e.target.value)} type="text" id="measurement"/>
+                    Name of the ingredient <input disabled={submitted} onChange={e => changeAnswers(index, "item", e.target.value)} type="text" id="name"/>
+                    Measurement for the ingredient <input disabled={submitted} onChange={e => changeAnswers(index, "measurement", e.target.value)} type="text" id="measurement"/>
                 </div>
             })}
             <button onClick={submitQuestion}>Submit</button>

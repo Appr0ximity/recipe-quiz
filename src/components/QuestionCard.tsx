@@ -299,8 +299,7 @@ export const QuestionCard = ({id, onComplete}: QuestionCardProps)=>{
                             {answers.map((userAnswer, index) => {
                                 // Find which correct ingredient this user answer matched
                                 let matchedIngredient = null
-                                let matchedIndex = -1
-                                 matchedIndex = -1
+                                let _matchedIndex = -1
                                 
                                 if (userAnswer.item) {
                                     let bestDistance = 10000
@@ -315,7 +314,7 @@ export const QuestionCard = ({id, onComplete}: QuestionCardProps)=>{
                                             if(currentDistance < bestDistance){
                                                 bestDistance = currentDistance
                                                 matchedIngredient = correctAnswers[j]
-                                                matchedIndex = j
+                                                _matchedIndex = j
                                             }
                                         }
                                     }

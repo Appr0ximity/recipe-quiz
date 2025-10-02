@@ -300,6 +300,7 @@ export const QuestionCard = ({id, onComplete}: QuestionCardProps)=>{
                                 // Find which correct ingredient this user answer matched
                                 let matchedIngredient = null
                                 let matchedIndex = -1
+                                 matchedIndex = -1
                                 
                                 if (userAnswer.item) {
                                     let bestDistance = 10000

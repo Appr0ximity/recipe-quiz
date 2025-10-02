@@ -5,7 +5,7 @@ import { QuestionCard } from './components/QuestionCard'
 function App() {
 
   const [questionNumbers, setQuestionNumbers] = useState<Set<number>>(new Set())
-  const [numberOfQuestions, setNumberOfQuestions] = useState(1)
+  const [numberOfQuestions, setNumberOfQuestions] = useState(0)
   const [showNumber, setShowNumber] = useState(true)
   const [completedQuestions, setCompletedQuestions] = useState(0)
   const [totalScore, setTotalScore] = useState(0)
@@ -79,6 +79,9 @@ function App() {
   }
 
   const handleStartQuiz = () => {
+    if(numberOfQuestions === 0){
+      alert("Enter a number to continue")
+    }
     setShowNumber(false)
     setCompletedQuestions(0)
     setTotalScore(0)

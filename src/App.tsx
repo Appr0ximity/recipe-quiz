@@ -1,6 +1,7 @@
 import { useState, type ReactNode } from 'react'
 import './App.css'
 import { QuestionCard } from './components/QuestionCard'
+import { cocktails } from './resources/recipes'
 
 function App() {
 
@@ -42,16 +43,23 @@ function App() {
     if (numberOfQuestions > 0) {
       setIsGeneratingQuestions(true)
       setTimeout(() => {
-        setQuestionNumbers(generateRandomQuestions(numberOfQuestions))
+        const newQuestionNumbers = generateRandomQuestions(numberOfQuestions)
+        setQuestionNumbers(newQuestionNumbers)
+        
+        // Calculate max possible score upfront based on the generated questions
+        let totalMaxScore = 0
+        Array.from(newQuestionNumbers).forEach(questionId => {
+          const cocktail = cocktails[questionId]
+          totalMaxScore += cocktail.numberOfIngredients * 2 // Each ingredient has 2 parts: name and measurement
+        })
+        setMaxPossibleScore(totalMaxScore)
+        
         setIsGeneratingQuestions(false)
       }, 100) // Small delay to show loading state
     }
   }
 
-  const handleQuestionComplete = (score: number, maxScore: number) => {
-    // Always add to max possible score (whether completed or blocked)
-    setMaxPossibleScore(prevMax => prevMax + maxScore)
-    
+  const handleQuestionComplete = (score: number) => {
     // If score is 0, this is a blocked question
     if (score === 0) {
       setBlockedQuestions(prev => {
@@ -86,13 +94,22 @@ function App() {
     setShowNumber(false)
     setCompletedQuestions(0)
     setTotalScore(0)
-    setMaxPossibleScore(0)
     setShowFinalScore(false)
     setBlockedQuestions(0)
     // Generate random questions when starting quiz
     setIsGeneratingQuestions(true)
     setTimeout(() => {
-      setQuestionNumbers(generateRandomQuestions(numberOfQuestions))
+      const newQuestionNumbers = generateRandomQuestions(numberOfQuestions)
+      setQuestionNumbers(newQuestionNumbers)
+      
+      // Calculate max possible score upfront based on the generated questions
+      let totalMaxScore = 0
+      Array.from(newQuestionNumbers).forEach(questionId => {
+        const cocktail = cocktails[questionId]
+        totalMaxScore += cocktail.numberOfIngredients * 2 // Each ingredient has 2 parts: name and measurement
+      })
+      setMaxPossibleScore(totalMaxScore)
+      
       setIsGeneratingQuestions(false)
     }, 100)
   }
@@ -174,17 +191,47 @@ function App() {
           </div>
         )}
 
-        {/* Final Score Display */}
+
+        {/* Loading State */}
+        {isGeneratingQuestions && (
+          <div className="text-center py-16">
+            <div className="text-6xl mb-6 animate-spin drop-shadow-2xl">⏳</div>
+            <p className="text-gray-300 text-xl font-body font-light">Generating new questions...</p>
+          </div>
+        )}
+
+        {/* Questions Grid */}
+        {numberOfQuestions > 0 && !isGeneratingQuestions && questionNumbers.size > 0 && (
+          <div className="grid gap-4">
+            {Array.from(questionNumbers).map((questionId, index):ReactNode=>{
+              return (
+                <div 
+                  key={`${questionId}-${index}`} 
+                  className="animate-fadeInUp"
+                  style={{ animationDelay: `${index * 100}ms` }}
+                >
+                  <QuestionCard 
+                    id={questionId} 
+                    onComplete={handleQuestionComplete}
+                  />
+                </div>
+              )
+          })}
+        </div>
+        )}
+
+        {/* Final Score Display - At Bottom of Content */}
         {showFinalScore && (
-          <div className="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-50 p-4">
-            <div className="bg-gradient-to-br from-gray-900 via-black to-gray-900 rounded-3xl border border-gray-800/50 p-10 max-w-lg w-full shadow-2xl animate-fadeInUp">
+          <div className="mt-8 mb-8">
+            <div className="bg-black/40 backdrop-blur-xl rounded-2xl border border-gray-800/50 p-8 shadow-2xl">
               <div className="text-center">
-                <div className="text-7xl mb-6 drop-shadow-2xl">🎉</div>
-                <h2 className="text-5xl font-display text-white mb-4">Quiz Complete!</h2>
-                <p className="text-gray-400 mb-8 text-xl font-body">Here's how you did:</p>
+                <div className="flex items-center justify-center gap-4 mb-6">
+                  <span className="text-5xl drop-shadow-2xl">🎉</span>
+                  <h2 className="text-4xl font-display text-white">Quiz Complete!</h2>
+                </div>
                 
-                <div className="bg-black/40 backdrop-blur-sm rounded-3xl p-8 mb-8 border border-gray-800/50">
-                  <div className="text-6xl font-mono font-black text-amber-400 mb-4 drop-shadow-lg">
+                <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-8 mb-6 border border-gray-800/50">
+                  <div className="text-5xl font-mono font-black text-amber-400 mb-4 drop-shadow-lg">
                     {totalScore.toFixed(1)} / {maxPossibleScore}
                   </div>
                   <div className="text-2xl text-gray-300 mb-4 font-body font-semibold">
@@ -212,51 +259,15 @@ function App() {
                   </div>
                 </div>
                 
-                <div className="flex gap-4">
-                  <button 
-                    onClick={refreshQuestions}
-                    className="flex-1 px-8 py-4 bg-gradient-to-r from-amber-400 via-orange-500 to-amber-600 hover:from-amber-500 hover:via-orange-600 hover:to-amber-700 text-black font-display rounded-2xl transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-amber-500/30"
-                  >
-                    Try Again
-                  </button>
-                  <button 
-                    onClick={() => setShowFinalScore(false)}
-                    className="flex-1 px-8 py-4 bg-gray-800/60 hover:bg-gray-700/60 text-gray-200 font-body font-semibold rounded-2xl transition-all duration-300 border border-gray-700 hover:border-gray-600"
-                  >
-                    Close
-                  </button>
-                </div>
+                <button 
+                  onClick={refreshQuestions}
+                  className="px-8 py-4 bg-gradient-to-r from-amber-400 via-orange-500 to-amber-600 hover:from-amber-500 hover:via-orange-600 hover:to-amber-700 text-black font-display rounded-xl transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-amber-500/30 text-lg"
+                >
+                  Try Again
+                </button>
               </div>
             </div>
           </div>
-        )}
-
-        {/* Loading State */}
-        {isGeneratingQuestions && (
-          <div className="text-center py-16">
-            <div className="text-6xl mb-6 animate-spin drop-shadow-2xl">⏳</div>
-            <p className="text-gray-300 text-xl font-body font-light">Generating new questions...</p>
-          </div>
-        )}
-
-        {/* Questions Grid */}
-        {numberOfQuestions > 0 && !showFinalScore && !isGeneratingQuestions && questionNumbers.size > 0 && (
-          <div className="grid gap-4">
-            {Array.from(questionNumbers).map((questionId, index):ReactNode=>{
-              return (
-                <div 
-                  key={`${questionId}-${index}`} 
-                  className="animate-fadeInUp"
-                  style={{ animationDelay: `${index * 100}ms` }}
-                >
-                  <QuestionCard 
-                    id={questionId} 
-                    onComplete={handleQuestionComplete}
-                  />
-                </div>
-              )
-          })}
-        </div>
         )}
       </div>
     </div>

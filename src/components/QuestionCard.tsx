@@ -3,7 +3,7 @@ import { cocktails } from "../resources/recipes"
 
 interface QuestionCardProps {
     id: number;
-    onComplete: (score: number, maxScore: number) => void;
+    onComplete: (score: number) => void;
 }
 
 export const QuestionCard = ({id, onComplete}: QuestionCardProps)=>{
@@ -30,6 +30,9 @@ export const QuestionCard = ({id, onComplete}: QuestionCardProps)=>{
     }
 
     const submitIngredientCount = () => {
+        if (countSubmissionAttempted) {
+            return // Prevent multiple submissions
+        }
         setCountSubmissionAttempted(true)
         const value = Number(ingredientCountValue)
         if (value === numberOfInputs) {
@@ -38,9 +41,8 @@ export const QuestionCard = ({id, onComplete}: QuestionCardProps)=>{
         } else {
             setNumberCorrect(false)
             setIngredientCountSubmitted(false)
-            // Notify parent that this question is blocked (0 score, but still counts toward max score)
-            const maxScoreForThisQuestion = numberOfInputs * 2 // Each ingredient has 2 parts: name and measurement
-            onComplete(0, maxScoreForThisQuestion) // 0 score, but full max possible score for blocked questions
+            // Notify parent that this question is blocked (0 score)
+            onComplete(0) // 0 score for blocked questions
         }
     }
 
@@ -131,8 +133,7 @@ export const QuestionCard = ({id, onComplete}: QuestionCardProps)=>{
         
         // Notify parent component about completion
         if (!hasNotifiedCompletion) {
-            const maxScore = numberOfInputs * 2; // Each ingredient has 2 parts: name and measurement
-            onComplete(pointsScored, maxScore);
+            onComplete(pointsScored);
             setHasNotifiedCompletion(true);
         }
     }

@@ -81,6 +81,7 @@ function App() {
   const handleStartQuiz = () => {
     if(numberOfQuestions === 0){
       alert("Enter a number to continue")
+      return
     }
     setShowNumber(false)
     setCompletedQuestions(0)
